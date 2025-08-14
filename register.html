@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration</title>
+  <script>
+    const char = JSON.parse(window.localStorage.getItem('char'));
+    if (char) window.location.href = 'index.html';
+  </script>
+</head>
+<body>
+  <label>
+    <input type="text" placeholder="Enter your name" required>
+  </label>
+  <button>Register</button>
+  <script src="assets/index.js"></script>
+  <script>
+    document.querySelector('button').addEventListener('click', () => {
+      const name = document.querySelector('input').value;
+      const char = new Char({name});
+      window.localStorage.setItem('char', JSON.stringify(char));
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

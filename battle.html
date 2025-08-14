@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battle</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/index.js"></script>
+  <script>
+    const charFromStorage = JSON.parse(window.localStorage.getItem('char'));
+    if (!charFromStorage) {
+      window.location.href = 'register.html';
+    }
+  </script>
+</head>
+<body>
+  <form id="battle">
+    <div class="battle-wrapper">
+      <div class="player">
+        <p class="health">100</p>
+      </div>
+      <div class="battle-form">
+        <div class="attack-form">
+          <label>
+            <input type="checkbox" name="attack" value="head">
+            Head
+          </label>
+          <label>
+            <input type="checkbox" name="attack" value="Neck">
+            Neck
+          </label>
+          <label>
+            <input type="checkbox" name="attack" value="Body">
+            Body
+          </label>
+          <label>
+            <input type="checkbox" name="attack" value="Belly">
+            Belly
+          </label>
+          <label>
+            <input type="checkbox" name="attack" value="Legs">
+            Legs
+          </label>
+        </div>
+        <div class="defence-form">
+          <label>
+            <input type="checkbox" name="defence" value="head">
+            Head
+          </label>
+          <label>
+            <input type="checkbox" name="defence" value="Neck">
+            Neck
+          </label>
+          <label>
+            <input type="checkbox" name="defence" value="Body">
+            Body
+          </label>
+          <label>
+            <input type="checkbox" name="defence" value="Belly">
+            Belly
+          </label>
+          <label>
+            <input type="checkbox" name="defence" value="Legs">
+            Legs
+          </label>
+        </div>
+      </div>
+      <div class="enemy">
+        <p class="health">100</p>
+      </div>
+    </div>
+    <button class="attack">Attack</button>
+  </form>
+  <div class="log"></div>
+
+  <script>
+    const char = new Char(charFromStorage);
+    const char2 = new Char(charFromStorage);
+    char2.name = 'Enemy';
+    char2.critChance = 90;
+    const battleFromStorage = JSON.parse(window.localStorage.getItem('battle'));
+    const battle = !battleFromStorage ? new Battle(char, char2) : new Battle(battleFromStorage.char1, battleFromStorage.char2, battleFromStorage.battleLog);
+    console.log(battle);
+    battle.start();
+
+    document.querySelector('.attack').addEventListener('click', (event) => {
+      event.preventDefault();
+      const attack = [...document.querySelectorAll('input[name="attack"]:checked')].map(a => a.value);
+      const defence = [...document.querySelectorAll('input[name="defence"]:checked')].map(d => d.value);
+      if (!attack || !defence) {
+        alert('Please select both attack and defence options.');
+        return;
+      }
+      console.log(attack, defence);
+      battle.makeTurn(attack, defence);
+    });
+  </script>
+</body>
+</html>

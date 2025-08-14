@@ -1,0 +1,18 @@
+.battle-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+.battle-form {
+  display: flex;
+  flex-direction: row;
+}
+.attack-form, .defence-form {
+  display: flex;
+  flex-direction: column;
+}
+strong.red {
+  color: red;
+}
+.log .divider {
+  border-bottom: 1px solid #ccc;
+}
