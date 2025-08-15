@@ -4,12 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Main page</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    main {
+      align-content: center;
+      text-align: center;
+    }
+  </style>
   <script>
     const char = JSON.parse(window.localStorage.getItem('char'));
     if (!char) window.location.href = 'register.html';
   </script>
 </head>
 <body>
-  <a href="battle.html">Fight!</a>
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main>
+    <div class="container">
+      <a href="battle.html" class="button">Fight!</a>
+    </div>
+  </main>
+  <script>
+    const currentPage = document.location.pathname.split('/').pop();
+    document.querySelector('nav ul li a[href="' + currentPage + '"]').classList.add('active');
+  </script>
 </body>
 </html>

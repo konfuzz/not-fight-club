@@ -14,76 +14,145 @@
   </script>
 </head>
 <body>
-  <form id="battle">
-    <div class="battle-wrapper">
-      <div class="player">
-        <p class="health">100</p>
-      </div>
-      <div class="battle-form">
-        <div class="attack-form">
-          <label>
-            <input type="checkbox" name="attack" value="head">
-            Head
-          </label>
-          <label>
-            <input type="checkbox" name="attack" value="Neck">
-            Neck
-          </label>
-          <label>
-            <input type="checkbox" name="attack" value="Body">
-            Body
-          </label>
-          <label>
-            <input type="checkbox" name="attack" value="Belly">
-            Belly
-          </label>
-          <label>
-            <input type="checkbox" name="attack" value="Legs">
-            Legs
-          </label>
-        </div>
-        <div class="defence-form">
-          <label>
-            <input type="checkbox" name="defence" value="head">
-            Head
-          </label>
-          <label>
-            <input type="checkbox" name="defence" value="Neck">
-            Neck
-          </label>
-          <label>
-            <input type="checkbox" name="defence" value="Body">
-            Body
-          </label>
-          <label>
-            <input type="checkbox" name="defence" value="Belly">
-            Belly
-          </label>
-          <label>
-            <input type="checkbox" name="defence" value="Legs">
-            Legs
-          </label>
-        </div>
-      </div>
-      <div class="enemy">
-        <p class="health">100</p>
-      </div>
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
     </div>
-    <button class="attack">Attack</button>
-  </form>
-  <div class="log"></div>
+  </nav>
+  <main>
+    <div class="container">
+      <form id="battle">
+        <div class="battle-wrapper">
+          <div class="player">
+            <p class="name"></p>
+            <div class="health"></div>
+            <img src="/assets/images/default.jpg" alt="Player's avatar" class="avatar">
+          </div>
+          <div class="battle-form">
+            <div class="attack-form">
+              <p>Attack</p>
+              <label>
+                <input type="checkbox" name="attack" value="Head">
+                Head
+              </label>
+              <label>
+                <input type="checkbox" name="attack" value="Neck">
+                Neck
+              </label>
+              <label>
+                <input type="checkbox" name="attack" value="Body">
+                Body
+              </label>
+              <label>
+                <input type="checkbox" name="attack" value="Belly">
+                Belly
+              </label>
+              <label>
+                <input type="checkbox" name="attack" value="Legs">
+                Legs
+              </label>
+            </div>
+            <div class="defence-form">
+              <p>Defence</p>
+              <label>
+                Head
+                <input type="checkbox" name="defence" value="Head">
+              </label>
+              <label>
+                Neck
+                <input type="checkbox" name="defence" value="Neck">
+              </label>
+              <label>
+                Body
+                <input type="checkbox" name="defence" value="Body">
+              </label>
+              <label>
+                Belly
+                <input type="checkbox" name="defence" value="Belly">
+              </label>
+              <label>
+                Legs
+                <input type="checkbox" name="defence" value="Legs">
+              </label>
+            </div>
+          </div>
+          <div class="enemy">
+            <p class="name"></p>
+            <div class="health"></div>
+            <img src="/assets/images/default.jpg" alt="Enemy's avatar" class="avatar">
+          </div>
+        </div>
+        <button class="attack button" disabled>Attack</button>
+      </form>
+      <div class="log"></div>
+    </div>
+  </main>
 
   <script>
     const char = new Char(charFromStorage);
-    const char2 = new Char(charFromStorage);
+    const char2 = new Char(structuredClone(charFromStorage));
     char2.name = 'Enemy';
-    char2.critChance = 90;
+    char2.critChance = 10;
+    // char2.setStat('endurance', 100);
+    // char2.setStat('strength', 1);
+    char2.avatar = '/assets/images/ork.png';
     const battleFromStorage = JSON.parse(window.localStorage.getItem('battle'));
-    const battle = !battleFromStorage ? new Battle(char, char2) : new Battle(battleFromStorage.char1, battleFromStorage.char2, battleFromStorage.battleLog);
+    const battle = !battleFromStorage ? new Battle(char, char2) : new Battle(new Char(battleFromStorage.char1), battleFromStorage.char2, battleFromStorage.battleLog, battleFromStorage.playerPattern);
     console.log(battle);
     battle.start();
 
-    document.querySelector('.attack').addEventListener('click', (event) => {
+    let hits = [];
+    let blocks = [];
+
+    const form = document.querySelector('#battle');
+    const attacks = document.querySelectorAll('input[name="attack"]');
+    const defences = document.querySelectorAll('input[name="defence"]');
+    const attackBtn = document.querySelector('.attack');
+    const valid = { attacks: false, defences: false };
+
+    form.reset();
+    attackBtn.disabled = true;
+    
+
+    attacks.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        if (this.checked) {
+          hits.push(this);
+
+          if (hits.length > char.hits) {
+            const oldestCheckbox = hits.shift();
+            oldestCheckbox.checked = false;
+          }
+        } else {
+          hits = hits.filter(cb => cb !== this);
+        }
+        valid.attacks = hits.length === char.hits;
+        attackBtn.disabled = !valid.attacks || !valid.defences;
+      });
+    });
+
+    defences.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        if (this.checked) {
+          blocks.push(this);
+
+          if (blocks.length > char.blocks) {
+            const oldestCheckbox = blocks.shift();
+            oldestCheckbox.checked = false;
+          }
+        } else {
+          blocks = blocks.filter(cb => cb !== this);
+        }
+        valid.defences = blocks.length === char.blocks;
+        attackBtn.disabled = !valid.attacks || !valid.defences;
+      });
+    });
+
+    attackBtn.addEventListener('click', (event) => {
       event.preventDefault();
       const attack = [...document.querySelectorAll('input[name="attack"]:checked')].map(a => a.value);
       const defence = [...document.querySelectorAll('input[name="defence"]:checked')].map(d => d.value);
@@ -91,8 +160,13 @@
         alert('Please select both attack and defence options.');
         return;
       }
-      console.log(attack, defence);
-      battle.makeTurn(attack, defence);
+      const finished = battle.makeTurn(attack, defence);
+      if (finished) {
+        attackBtn.textContent = 'New Battle';
+        attackBtn.addEventListener('click', () => {
+          window.location.reload();
+        });
+      }
     });
   </script>
 </body>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    h1 {
+      font-size: 32px;
+    }
+    .profile-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .profile, .stats {
+      width: 48%;
+    }
+    .avatar {
+      max-width: 100%;
+      height: auto;
+    }
+    .stat {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .attr {
+      font-style: italic;
+      margin-bottom: 5px;
+    }
+    hr {
+      margin: 10px 0;
+    }
+  </style>
+  <script>
+    const char = JSON.parse(window.localStorage.getItem('char'));
+    if (!char) window.location.href = 'register.html';
+  </script>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="profile-wrapper">
+      <div class="profile">
+        
+        <img src="/assets/images/default.jpg" alt="Avatar" class="avatar">
+        <p class="wins">Wins: <span></span></p>
+        <p class="losses">Losses: <span></span></p>
+        <p class="draws">Draws: <span></span></p>
+      </div>
+      <div class="stats">
+        <h1 class="name"></h1>
+        <p class="stat">Level: <span class="level"></span></p>
+        <p class="stat">Experience: <span class="exp"></span></p>
+        <p class="stat">Gold: <span class="gold"></span></p>
+        <hr>
+        <p class="free-points">Free points: <span class="free-points-value"></span></p>
+        <div class="stat-wrapper" data-stat="strength">
+          <p class="stat">Strength: <span class="strength"></span></p>
+          <button class="plus">+</button><button class="minus">−</button>
+        </div>
+        <p class="attr">Damage: <span class="damage"></span></p>
+        <div class="stat-wrapper" data-stat="agility">
+          <p class="stat">Agility: <span class="agility"></span></p>
+          <button class="plus">+</button><button class="minus">−</button>
+        </div>
+        <p class="attr">Dodge chance: <span class="dodge"></span>%</p>
+        <div class="stat-wrapper" data-stat="luck">
+          <p class="stat">Luck: <span class="luck"></span></p>
+          <button class="plus">+</button><button class="minus">−</button>
+        </div>
+        <p class="attr">Critical hit chance: <span class="crit"></span>%</p>
+        <div class="stat-wrapper" data-stat="endurance">
+          <p class="stat">Endurance: <span class="endurance"></span></p>
+          <button class="plus">+</button><button class="minus">−</button>
+        </div>
+        <p class="attr">Health: <span class="inithealth"></span></p>
+        <button class="save">Save</button>
+        <button class="reset">Reset</button>
+      </div>
+    </div>
+  </div>
+  <script src="/assets/index.js"></script>
+  <script>
+    const currentPage = document.location.pathname.split('/').pop();
+    document.querySelector('nav ul li a[href="' + currentPage + '"]').classList.add('active');
+
+    const statsEl = document.querySelector('.stats');
+    
+    document.querySelector('.avatar').src = char.avatar;
+    document.querySelector('.name').innerText = char.name;
+    document.querySelector('.wins span').innerText = char.wins;
+    document.querySelector('.losses span').innerText = char.losses;
+    document.querySelector('.draws span').innerText = char.draws;
+
+    document.querySelector('.level').innerText = char.level;
+    document.querySelector('.exp').innerText = char.exp;
+    document.querySelector('.gold').innerText = char.gold;
+
+    const renderStats = (char) => {
+      document.querySelector('.strength').innerText = char.stats.strength;
+      document.querySelector('.damage').innerText = char.minDamage + '-' + char.maxDamage;
+      document.querySelector('.agility').innerText = char.stats.agility;
+      document.querySelector('.dodge').innerText = char.dodgeChance;
+      document.querySelector('.luck').innerText = char.stats.luck;
+      document.querySelector('.crit').innerText = char.critChance;
+      document.querySelector('.endurance').innerText = char.stats.endurance;
+      document.querySelector('.inithealth').innerText = char.initHealth;
+    }
+
+    renderStats(char);    
+
+    let freePoints = char.level * 5 + 20 - (char.stats.luck + char.stats.agility + char.stats.strength + char.stats.endurance);
+    const battle = JSON.parse(window.localStorage.getItem('battle'));
+    if (freePoints > 0 && !battle) {
+      const freePointsEl = document.querySelector('.free-points-value');
+      freePointsEl.innerText = freePoints;
+      statsEl.classList.add('allocation');
+      let newChar = new Char({...char});
+      newChar.stats = {...char.stats};
+
+      const allocatePoint = (stat) => {
+        if (freePoints <= 0) return;
+        newChar.setStat(stat, newChar.stats[stat] + 1);
+        freePoints--;
+      };
+
+      const removePoint = (stat) => {
+        console.log(newChar.stats[stat], char.stats[stat]);
+        if (newChar.stats[stat] > char.stats[stat]) {
+          newChar.setStat(stat, newChar.stats[stat] - 1);
+          freePoints++;
+        }
+      };
+
+      document.querySelectorAll('.plus,.minus').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const statEl = e.target.closest('.stat-wrapper')
+          const stat = statEl.dataset.stat;
+          if (e.target.classList.contains('plus')) {
+            allocatePoint(stat);
+          } else {
+            removePoint(stat);
+          }
+          statEl.querySelector('span').innerText = newChar.stats[stat];
+          freePointsEl.innerText = freePoints;
+          renderStats(newChar);
+        });
+      });
+
+      document.querySelector('.save').addEventListener('click', () => {
+        window.localStorage.setItem('char', JSON.stringify(newChar));
+        window.location.reload();
+      });
+
+      document.querySelector('.reset').addEventListener('click', () => {
+        for (const stat in newChar.stats) {
+          newChar.setStat(stat, char.stats[stat]);
+        }
+        freePoints = char.level * 5 + 20 - (char.stats.luck + char.stats.agility + char.stats.strength + char.stats.endurance);
+        document.querySelectorAll('.stat-wrapper span').forEach(span => {
+          const stat = span.closest('.stat-wrapper').dataset.stat;
+          span.innerText = newChar.stats[stat];
+        });
+        freePointsEl.innerText = freePoints;
+        renderStats(newChar);
+      });
+    } else if (battle && freePoints > 0) {
+      const freePointsEl = document.querySelector('.free-points');
+      freePointsEl.style.display = 'block';
+      freePointsEl.querySelector('span').innerHTML = `You have ${freePoints} free points to allocate but you need to <a href="battle.html">finish the current battle</a> first.`;
+    }
+  </script>
+</body>
+</html>

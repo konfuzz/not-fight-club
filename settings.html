@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <script>
+    const char = JSON.parse(window.localStorage.getItem('char'));
+    if (!char) window.location.href = 'register.html';
+  </script>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main>
+    <div class="container">
+      <h1>Settings</h1>
+      <p>Your name: <span class="current-name"></span></p>
+      <form>
+        <label>
+          Change name:
+          <input type="text" value="" />
+        </label>
+        <p class="success-message" style="display: none;">Name successfully changed!</p>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </main>
+  <script>
+    const currentName = document.querySelector('.current-name');
+    currentName.textContent = char.name;
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const nameInput = form.querySelector('input[type="text"]');
+      char.name = nameInput.value;
+      window.localStorage.setItem('char', JSON.stringify(char));
+      const battle = JSON.parse(window.localStorage.getItem('battle'));
+      if (battle) {
+        battle.player.name = char.name;
+        battle.char1.name = char.name;
+        window.localStorage.setItem('battle', JSON.stringify(battle));
+      }
+      currentName.textContent = char.name;
+      form.querySelector('.success-message').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

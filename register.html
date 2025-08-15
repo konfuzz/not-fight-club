@@ -4,16 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registration</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    main {
+      align-content: center;
+      text-align: center;
+    }
+  </style>
   <script>
     const char = JSON.parse(window.localStorage.getItem('char'));
     if (char) window.location.href = 'index.html';
   </script>
 </head>
 <body>
-  <label>
-    <input type="text" placeholder="Enter your name" required>
-  </label>
-  <button>Register</button>
+  <main>
+    <div class="container">
+      <label>
+        <input type="text" placeholder="Enter your name" required>
+      </label>
+      <button>Register</button>
+    </div>
+  </main>
+  
   <script src="assets/index.js"></script>
   <script>
     document.querySelector('button').addEventListener('click', () => {

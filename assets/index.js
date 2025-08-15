@@ -1,23 +1,54 @@
 class Char {
-  constructor({name, health=100, damage=10, critChance=50, hits=1, blocks=2, wins=0, loses=0, draws=0}) {
+  constructor({name, stats = {strength: 5, agility: 5, luck: 5, endurance: 5}, health, level=0, hits=1, blocks=2, wins=0, losses=0, draws=0, avatar='/assets/images/default.jpg', gold = 0, exp = 0, rewards = {exp: 50, gold: 100}}) {
     this.name = name;
-    this.initHealth = health;
-    this.health = health;
-    this.damage = damage;
-    this.critChance = critChance;
+    this.stats = stats;
+    this.initHealth = stats.endurance * 20;
+    this.health = health || this.initHealth;
+    this.minDamage = stats.strength;
+    this.maxDamage = stats.strength + 5;
+    this.critChance = stats.luck;
+    this.dodgeChance = stats.agility;
     this.hits = hits;
     this.blocks = blocks;
     this.wins = wins;
-    this.loses = loses;
+    this.losses = losses;
     this.draws = draws;
+    this.avatar = avatar;
+    this.exp = exp;
+    this.level = Math.floor(this.exp / 100);
+    this.rewards = rewards;
+    this.gold = gold;
+  }
+
+  calcLevel() {
+    this.level = Math.floor(this.exp / 100);
+  }
+
+  setStat(stat, value) {
+    this.stats[stat] = value;
+    switch (stat) {
+      case 'strength':
+        this.minDamage = value;
+        this.maxDamage = value + 5;
+        break;
+      case 'agility':
+        this.dodgeChance = value;
+        break;
+      case 'luck':
+        this.critChance = value;
+        break;
+      case 'endurance':
+        this.health = value * 20;
+        this.initHealth = this.health;
+        break;
+    }
   }
 }
 
 class Battle {
-  constructor(char1, char2, battleLog='') {
-    this.player = char1;
-    this.char1 = {...char1};
-    this.char2 = {...char2};
+  constructor(char1, char2, battleLog='', playerPattern) {
+    this.char1 = char1;
+    this.char2 = char2;
     this.zones = [
       "Head",
       "Neck",
@@ -25,71 +56,142 @@ class Battle {
       "Belly",
       "Legs"
     ];
-    this.critMultiplier = 1.5;
+    this.critMultiplier = 2;
     this.finished = false;
     this.battleLog = battleLog;
+    this.playerPattern = playerPattern || {attack: [], defense: []};
   }
 
   start() {
     window.localStorage.setItem('battle', JSON.stringify(this));
-    document.querySelector('.log').innerHTML = this.battleLog;
+    document.querySelector('.log').innerHTML = this.battleLog ? this.battleLog : 'The battle begins...';
+    this.initRender();
   }
 
-  makeTurn(playerAttackZones, playerDefenceZones, log = this.log) {
+  makeTurn(playerAttackZones, playerDefenceZones) {
     if (this.finished) return;
+    console.log(playerAttackZones, playerDefenceZones);
+    playerAttackZones.forEach(zone => this.playerPattern.attack.push(zone));
+    playerDefenceZones.forEach(zone => this.playerPattern.defense.push(zone));
+    console.log(this.playerPattern);
+    
     const {enemyAttackZones, enemyDefenceZones} = this.generateEnemyZones();
+    console.log(enemyAttackZones, enemyDefenceZones);
 
-    const playerMakeDamage = calcDamage(playerAttackZones, enemyDefenceZones, this.char1, this.char2, this.critMultiplier);
-    const enemyMakeDamage = calcDamage(enemyAttackZones, playerDefenceZones, this.char2, this.char1, this.critMultiplier);
-
-    function calcDamage(attackZones, defenceZones, attacker, defender, critMultiplier) {
-      return attackZones.reduce((total, zone) => {
-        const crit = calcCritChance(attacker.critChance);
-        if (!defenceZones.includes(zone)) {
-          if (crit) {
-            log(`<strong>${attacker.name}</strong> landed a critical hit on <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> and dealt <strong class="red">${attacker.damage * critMultiplier}</strong> damage`);
-            return total + attacker.damage * critMultiplier;
-          }
-          log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> and dealt <strong>${attacker.damage}</strong> damage`);
-          return total + attacker.damage;
-        }
-        if (crit) {
-          log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong>. It was blocked, but a critical hit would have dealt <strong class="red">${attacker.damage}</strong> damage`);
-          return total + attacker.damage;
-        } else {
-          log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> but it was blocked`);
-          return total;
-        }
-        
-      }, 0)
-    }
-
-    function calcCritChance(critChance) {
-      return Math.random() * 100 < critChance;
-    }
+    const playerMakeDamage = this.calcDamage(playerAttackZones, enemyDefenceZones, this.char1, this.char2);
+    const enemyMakeDamage = this.calcDamage(enemyAttackZones, playerDefenceZones, this.char2, this.char1);
 
     console.log(playerMakeDamage, enemyMakeDamage);
     this.char2.health -= playerMakeDamage;
     this.char1.health -= enemyMakeDamage;
-    log();
+    this.log();
+    this.render();
     this.save();
     if (this.char1.health <= 0 && this.char2.health <= 0) {
-      this.finishBattle()
-      log(`Draw. You killed each other.`);
+      return this.finishBattle(null)
     } else if (this.char1.health <= 0 && this.char2.health > 0) {
-      this.finishBattle(this.char2)
-      log(`Nice try but you lost the battle.`);
+      return this.finishBattle(this.char2)
     } else if (this.char2.health <= 0 && this.char1.health > 0) {
-      this.finishBattle(this.char1)
-      log(`You win the battle. Enemy defeated.`);
+      return this.finishBattle(this.char1)
     } 
-    console.log(this)
+  }
+
+  ai() {
+    const attackWeights = this.playerPattern.attack.reduce((acc, zone) => {
+      acc[zone] = (acc[zone] || 0) + 1;
+      return acc;
+    }, {});
+    const defenceWeights = this.playerPattern.defense.reduce((acc, zone) => {
+      acc[zone] = (acc[zone] || 0) + 1;
+      return acc;
+    }, {});
+    console.log(attackWeights, defenceWeights);
+    const attackMaxValue = getMaxValueKeys(attackWeights, this.char2.blocks > 1 ? this.char2.blocks - 1 : 1);
+    const defenceMaxValue = getMaxValueKeys(defenceWeights, this.char1.blocks);
+    console.log(attackMaxValue, defenceMaxValue);
+
+    return { attackPrediction: attackMaxValue, defencePrediction: defenceMaxValue };
+
+    function getMaxValueKeys(obj, size) {
+      return Object.keys(obj).sort((a, b) => obj[a] < obj[b]).splice(0, size);
+    }
+
+  }
+
+  calcDamage(attackZones, defenceZones, attacker, defender) {
+    return attackZones.reduce((total, zone) => {
+      const crit = this.calcChance(attacker.critChance);
+      const damage = this.calcPunchDamage(attacker);
+      const dodge = this.calcChance(defender.dodgeChance);
+      if (dodge) {
+        this.log(`<strong>${attacker.name}</strong> tried to hit <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> but <strong>${defender.name}</strong> dodged from it.`);
+        return total;
+      }
+      if (!defenceZones.includes(zone)) {
+        if (crit) {
+          this.log(`<strong>${attacker.name}</strong> landed a critical hit on <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> and dealt <strong class="red">${damage * this.critMultiplier}</strong> damage`);
+          return total + damage * this.critMultiplier;
+        } else {
+          this.log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> and dealt <strong>${damage}</strong> damage`);
+          return total + damage;
+        }
+      } else {
+        if (crit) {
+          this.log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong>. ${defender.name} tried to block, but got critical hit and dealt <strong class="red">${damage}</strong> damage`);
+          return total + damage;
+        } else {
+          this.log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> but it was blocked`);
+          return total;
+        }
+      }
+    }, 0)
+  }
+
+  finishBattle(winner) {
+    this.finished = true;
+    if (!winner) {
+      this.char1.draws++;
+      this.log(`Draw. You killed each other.`);
+    }
+    if (winner === this.char1) {
+      this.char1.wins++;
+      const exp = Math.random() * 100 < this.char1.critChance ? this.char2.rewards.exp : Math.floor(Math.max(Math.random(), 0.1) * this.char2.rewards.exp);
+      this.char1.exp += exp;
+      const gold = Math.random() * 100 < this.char1.critChance ? this.char2.rewards.gold : Math.floor(Math.max(Math.random(), 0.1) * this.char2.rewards.gold);
+      this.char1.gold += gold;
+      this.log(`You win the battle. Enemy defeated.`);
+      this.log(`You gained ${exp} exp and ${gold} gold.`);
+      this.char1.calcLevel();
+    } else if (winner === this.char2) {
+      this.char1.losses++;
+      this.log(`Nice try but you lost the battle.`);
+    }
+    this.char1.health = this.char1.initHealth;
+    window.localStorage.setItem('char', JSON.stringify(this.char1));
+    window.localStorage.removeItem('battle');
+    return true;
+  }
+
+  calcChance(critChance) {
+    return Math.random() * 100 < critChance;
+  }
+
+  calcPunchDamage(attacker) {
+    const baseDamage = Math.floor(Math.random() * (attacker.maxDamage - attacker.minDamage + 1)) + attacker.minDamage;
+    return baseDamage;
   }
 
   generateEnemyZones() {
+    const prediction = this.ai();
+    const attackZones = this.zones.filter(zone => !prediction.defencePrediction.includes(zone));
+    const defenceZones = this.zones.filter(zone => !prediction.attackPrediction.includes(zone));
+
+    const enemyDefenceZones = getRandomElements(defenceZones, this.char2.blocks - prediction.attackPrediction.length).concat(prediction.attackPrediction);
+    console.log(enemyDefenceZones);
+
     return {
-      enemyAttackZones: getRandomElements(this.zones, this.char2.hits),
-      enemyDefenceZones: getRandomElements(this.zones, this.char2.blocks)
+      enemyAttackZones: getRandomElements(attackZones, this.char2.hits),
+      enemyDefenceZones: enemyDefenceZones
     }
 
     function getRandomElements(arr, n) {
@@ -118,25 +220,44 @@ class Battle {
     document.querySelector('.log').prepend(logEntry);
   }
 
-  finishBattle(winner) {
-    this.finished = true;
-    if (!winner) {
-      this.player.draws++;
-      return;
-    }
-    if (winner === this.char1) {
-      this.player.wins++;
-    } else {
-      this.player.loses++;
-    }
-    this.player.health = this.player.initHealth;
-    window.localStorage.setItem('char', JSON.stringify(this.player));
-    window.localStorage.removeItem('battle');
-  }
-
   save() {
     this.battleLog = document.querySelector('.log').innerHTML;
     window.localStorage.setItem('battle', JSON.stringify(this));
+  }
+  initRender() {
+    document.querySelector('.player .health').dataset.health = this.char1.health;
+    document.querySelector('.enemy .health').dataset.health = this.char2.health;
+    document.querySelector('.player .health').dataset.init = this.char1.initHealth;
+    document.querySelector('.enemy .health').dataset.init = this.char2.initHealth;
+    document.querySelector('.player .name').innerText = this.char1.name;
+    document.querySelector('.enemy .name').innerText = this.char2.name;
+    document.querySelector('.player .avatar').src = this.char1.avatar;
+    document.querySelector('.enemy .avatar').src = this.char2.avatar;
+    this.renderHealth();
+  }
+
+  render() {
+    this.renderHealth();
+  }
+
+  renderHealth() {
+    document.querySelector('.player .health').dataset.health = this.char1.health;
+    document.querySelector('.enemy .health').dataset.health = this.char2.health;
+
+    if (this.char1.health * 100 / this.char1.initHealth <= 70) {
+      document.querySelector('.player .health').style.setProperty('--color', `#ded712`);
+    }
+    if (this.char2.health * 100 / this.char2.initHealth <= 70) {
+      document.querySelector('.enemy .health').style.setProperty('--color', `#ded712`);
+    }
+    if (this.char1.health * 100 / this.char1.initHealth <= 30) {
+      document.querySelector('.player .health').style.setProperty('--color', `red`);
+    }
+    if (this.char2.health * 100 / this.char2.initHealth <= 30) {
+      document.querySelector('.enemy .health').style.setProperty('--color', `red`);
+    }
+    document.querySelector('.player .health').style.setProperty('--health', `${this.char1.health * 100 / this.char1.initHealth}%`);
+    document.querySelector('.enemy .health').style.setProperty('--health', `${this.char2.health * 100 / this.char2.initHealth}%`);
   }
   
 }
