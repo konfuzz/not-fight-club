@@ -5,6 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Settings</title>
   <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    h1 {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    p {
+      margin-bottom: 10px;
+    }
+    .success-message {
+      margin-top: 5px;
+      font-size: 16px;
+      color: var(--accent);
+    }
+    input {
+      padding: 4px 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: 1px solid transparent;
+      line-height: 1;
+    }
+    button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+  </style>
   <script>
     const char = JSON.parse(window.localStorage.getItem('char'));
     if (!char) window.location.href = 'register.html';
@@ -13,10 +43,13 @@
 <body>
   <nav>
     <div class="container">
+      <span class="menu-logo">Not Fight Club</span>
       <ul>
         <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
         <li><a href="profile.html">Profile</a></li>
         <li><a href="settings.html">Settings</a></li>
+        <li><a href="battle.html" class="battle-btn">Fight!</a></li>
       </ul>
     </div>
   </nav>
@@ -29,12 +62,21 @@
           Change name:
           <input type="text" value="" />
         </label>
-        <p class="success-message" style="display: none;">Name successfully changed!</p>
         <button type="submit">Save</button>
+        <p class="success-message" style="display: none;">Name successfully changed!</p>
       </form>
     </div>
   </main>
   <script>
+    const currentPage = document.location.pathname.split('/').pop();
+    document.querySelector('nav ul li a[href="' + currentPage + '"]').classList.add('active');
+
+    const battleBtn = document.querySelector('.battle-btn');
+    const battle = JSON.parse(window.localStorage.getItem('battle'));
+    if (battle) {
+      battleBtn.textContent = 'Resume battle';
+    }
+
     const currentName = document.querySelector('.current-name');
     currentName.textContent = char.name;
     const form = document.querySelector('form');

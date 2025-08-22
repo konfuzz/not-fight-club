@@ -12,12 +12,93 @@
       window.location.href = 'register.html';
     }
   </script>
+  <style>
+    .lvl-up {
+      font-size: 12px;
+      color: red;
+      margin-left: 5px;
+      position: relative;
+      bottom: 1px;
+    }
+    .attack-form p, .defence-form p {
+      padding-bottom: 5px;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    
+    #battle {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .battle-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    .player, .enemy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .battle-form {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+    .attack-form, .defence-form {
+      display: flex;
+      flex-direction: column;
+      align-items:flex-start;
+      text-align: left;
+      width: 100px;
+    }
+    .defence-form {
+      align-items: flex-end;
+    }
+
+
+    .health {
+      width: 300px;
+      height: 20px;
+      --color: #7ae27e;
+      --health: 100%;
+      border: 1px solid #000;  
+      position: relative;
+      background-color: #dfa7a7;
+    }
+    .health::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: var(--health);
+      height: 100%;
+      background-color: var(--color);
+      transition: all 0.3s ease;
+    }
+    .health::after {
+      content: attr(data-health) "/" attr(data-init);
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: black;
+      z-index: 1;
+    }
+  </style>
 </head>
 <body>
   <nav>
     <div class="container">
+      <span class="menu-logo">Not Fight Club</span>
       <ul>
         <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
         <li><a href="profile.html">Profile</a></li>
         <li><a href="settings.html">Settings</a></li>
       </ul>
@@ -30,7 +111,7 @@
           <div class="player">
             <p class="name"></p>
             <div class="health"></div>
-            <img src="/assets/images/default.jpg" alt="Player's avatar" class="avatar">
+            <img src="" alt="Player's avatar" class="avatar">
           </div>
           <div class="battle-form">
             <div class="attack-form">
@@ -87,87 +168,118 @@
           </div>
         </div>
         <button class="attack button" disabled>Attack</button>
+        <button class="random button" type="button" style="display: none;">Random</button>
       </form>
       <div class="log"></div>
     </div>
   </main>
-
   <script>
-    const char = new Char(charFromStorage);
-    const char2 = new Char(structuredClone(charFromStorage));
-    char2.name = 'Enemy';
-    char2.critChance = 10;
-    // char2.setStat('endurance', 100);
-    // char2.setStat('strength', 1);
-    char2.avatar = '/assets/images/ork.png';
-    const battleFromStorage = JSON.parse(window.localStorage.getItem('battle'));
-    const battle = !battleFromStorage ? new Battle(char, char2) : new Battle(new Char(battleFromStorage.char1), battleFromStorage.char2, battleFromStorage.battleLog, battleFromStorage.playerPattern);
-    console.log(battle);
-    battle.start();
+    (async () => {
+      const char = new Char(charFromStorage);
+      const enemies = await fetch('/assets/enemies.json').then(res => res.json()).then(enemies => enemies.filter(enemy => enemy.minvlv <= char.level));
+      const randomIndex = Math.floor(Math.random() * enemies.length)
+      const char2 = new Enemy(enemies[randomIndex]);
 
-    let hits = [];
-    let blocks = [];
+      const battleFromStorage = JSON.parse(window.localStorage.getItem('battle'));
+      const battle = !battleFromStorage ? new Battle(char, char2) : new Battle(new Char(battleFromStorage.char1), battleFromStorage.char2, battleFromStorage.battleLog, battleFromStorage.playerPattern);
+      console.log(battle);
+      battle.start();
+      calcLvlUp();
 
-    const form = document.querySelector('#battle');
-    const attacks = document.querySelectorAll('input[name="attack"]');
-    const defences = document.querySelectorAll('input[name="defence"]');
-    const attackBtn = document.querySelector('.attack');
-    const valid = { attacks: false, defences: false };
+      let hits = [];
+      let blocks = [];
 
-    form.reset();
-    attackBtn.disabled = true;
-    
+      const form = document.querySelector('#battle');
+      const attacks = document.querySelectorAll('input[name="attack"]');
+      const defences = document.querySelectorAll('input[name="defence"]');
+      const attackBtn = document.querySelector('.attack');
+      const randomBtn = document.querySelector('.random');
+      const valid = { attacks: false, defences: false };
 
-    attacks.forEach(checkbox => {
-      checkbox.addEventListener('change', function () {
-        if (this.checked) {
-          hits.push(this);
+      form.reset();
+      attackBtn.disabled = true;
 
-          if (hits.length > char.hits) {
-            const oldestCheckbox = hits.shift();
-            oldestCheckbox.checked = false;
+      attacks.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+          if (this.checked) {
+            hits.push(this);
+
+            if (hits.length > char.hits) {
+              const oldestCheckbox = hits.shift();
+              oldestCheckbox.checked = false;
+            }
+          } else {
+            hits = hits.filter(cb => cb !== this);
           }
-        } else {
-          hits = hits.filter(cb => cb !== this);
-        }
-        valid.attacks = hits.length === char.hits;
-        attackBtn.disabled = !valid.attacks || !valid.defences;
-      });
-    });
-
-    defences.forEach(checkbox => {
-      checkbox.addEventListener('change', function () {
-        if (this.checked) {
-          blocks.push(this);
-
-          if (blocks.length > char.blocks) {
-            const oldestCheckbox = blocks.shift();
-            oldestCheckbox.checked = false;
-          }
-        } else {
-          blocks = blocks.filter(cb => cb !== this);
-        }
-        valid.defences = blocks.length === char.blocks;
-        attackBtn.disabled = !valid.attacks || !valid.defences;
-      });
-    });
-
-    attackBtn.addEventListener('click', (event) => {
-      event.preventDefault();
-      const attack = [...document.querySelectorAll('input[name="attack"]:checked')].map(a => a.value);
-      const defence = [...document.querySelectorAll('input[name="defence"]:checked')].map(d => d.value);
-      if (!attack || !defence) {
-        alert('Please select both attack and defence options.');
-        return;
-      }
-      const finished = battle.makeTurn(attack, defence);
-      if (finished) {
-        attackBtn.textContent = 'New Battle';
-        attackBtn.addEventListener('click', () => {
-          window.location.reload();
+          valid.attacks = hits.length === char.hits;
+          attackBtn.disabled = !valid.attacks || !valid.defences;
         });
+      });
+
+      defences.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+          if (this.checked) {
+            blocks.push(this);
+
+            if (blocks.length > char.blocks) {
+              const oldestCheckbox = blocks.shift();
+              oldestCheckbox.checked = false;
+            }
+          } else {
+            blocks = blocks.filter(cb => cb !== this);
+          }
+          valid.defences = blocks.length === char.blocks;
+          attackBtn.disabled = !valid.attacks || !valid.defences;
+        });
+      });
+
+      attackBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        const attack = [...document.querySelectorAll('input[name="attack"]:checked')].map(a => a.value);
+        const defence = [...document.querySelectorAll('input[name="defence"]:checked')].map(d => d.value);
+        if (!attack || !defence) {
+          alert('Please select both attack and defence options.');
+          return;
+        }
+        const finished = battle.makeTurn(attack, defence);
+        calcLvlUp();
+        if (finished) {
+          attackBtn.textContent = 'New Battle';
+          attackBtn.addEventListener('click', () => {
+            window.location.reload();
+          });
+        }
+      });
+
+      randomBtn.addEventListener('click', () => {
+        const hits = char.hits;
+        const blocks = char.blocks;
+        let attack = [];
+        let defence = [];
+
+        for (let i = 0; i < hits; i++) {
+          const attackIndex = Math.floor(Math.random() * attacks.length);
+          console.log(attackIndex);
+          attack.push(attacks[attackIndex].value);        }
+        for (let i = 0; i < blocks; i++) {
+          const defenceIndex = Math.floor(Math.random() * defences.length);
+          console.log(defenceIndex);
+          defence.push(defences[defenceIndex].value);
+        }
+        battle.makeTurn(attack, defence);
+      });
+
+      function calcLvlUp() {
+        const freePoints = char.level * 5 + 20 - (char.stats.luck + char.stats.agility + char.stats.strength + char.stats.endurance);
+        if (freePoints > 0) {
+          const freePointsEl = document.querySelector('.player .name span') || document.createElement('span');
+          const playerNameEl = document.querySelector('.player .name');
+          freePointsEl.classList.add('lvl-up');
+          freePointsEl.innerText = 'Level Up!';
+          playerNameEl.append(freePointsEl);
+        }
       }
-    });
+    })()
   </script>
 </body>
 </html>

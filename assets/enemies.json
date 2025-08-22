@@ -1,0 +1,172 @@
+[
+  {
+    "name": "Sly Goblin",
+    "initHealth": 35,
+    "health": 35,
+    "minDamage": 3,
+    "maxDamage": 6,
+    "critChance": 3,
+    "dodgeChance": 5,
+    "hits": 1,
+    "blocks": 1,
+    "avatar": "/assets/images/enemies/goblin.png",
+    "rewards": {
+      "exp": 20,
+      "gold": 50
+    },
+    "minvlv": 0
+  },
+  {
+    "name": "Lizardman",
+    "initHealth": 55,
+    "health": 55,
+    "minDamage": 3,
+    "maxDamage": 6,
+    "critChance": 5,
+    "dodgeChance": 5,
+    "hits": 1,
+    "blocks": 2,
+    "avatar": "/assets/images/enemies/lizard.png",
+    "rewards": {
+      "exp": 25,
+      "gold": 60
+    },
+    "minvlv": 0
+  },
+  {
+    "name": "Stupid Troll",
+    "initHealth": 80,
+    "health": 80,
+    "minDamage": 6,
+    "maxDamage": 10,
+    "critChance": 7,
+    "dodgeChance": 0,
+    "hits": 1,
+    "blocks": 2,
+    "avatar": "/assets/images/enemies/troll.png",
+    "rewards": {
+      "exp": 35,
+      "gold": 70
+    },
+    "minvlv": 2
+  },
+  {
+    "name": "Angry Ork",
+    "initHealth": 120,
+    "health": 120,
+    "minDamage": 8,
+    "maxDamage": 14,
+    "critChance": 10,
+    "dodgeChance": 5,
+    "hits": 1,
+    "blocks": 2,
+    "avatar": "/assets/images/enemies/ork.png",
+    "rewards": {
+      "exp": 60,
+      "gold": 100
+    },
+    "minvlv": 4
+  },
+  {
+    "name": "Evil Ogre",
+    "initHealth": 150,
+    "health": 150,
+    "minDamage": 10,
+    "maxDamage": 16,
+    "critChance": 12,
+    "dodgeChance": 5,
+    "hits": 2,
+    "blocks": 2,
+    "avatar": "/assets/images/enemies/ogre.png",
+    "rewards": {
+      "exp": 90,
+      "gold": 150
+    },
+    "minvlv": 5
+  },
+  {
+    "name": "Dark Elf",
+    "initHealth": 140,
+    "health": 140,
+    "minDamage": 9,
+    "maxDamage": 15,
+    "critChance": 15,
+    "dodgeChance": 12,
+    "hits": 2,
+    "blocks": 2,
+    "avatar": "/assets/images/enemies/dark-elf.png",
+    "rewards": {
+      "exp": 100,
+      "gold": 170
+    },
+    "minvlv": 6
+  },
+  {
+    "name": "Death Knight",
+    "initHealth": 180,
+    "health": 180,
+    "minDamage": 12,
+    "maxDamage": 18,
+    "critChance": 12,
+    "dodgeChance": 5,
+    "hits": 2,
+    "blocks": 3,
+    "avatar": "/assets/images/enemies/death-knight.png",
+    "rewards": {
+      "exp": 130,
+      "gold": 220
+    },
+    "minvlv": 7
+  },
+  {
+    "name": "Gargoyle",
+    "initHealth": 160,
+    "health": 160,
+    "minDamage": 11,
+    "maxDamage": 17,
+    "critChance": 10,
+    "dodgeChance": 15,
+    "hits": 2,
+    "blocks": 2,
+    "avatar": "/assets/images/enemies/gargoyle.png",
+    "rewards": {
+      "exp": 120,
+      "gold": 200
+    },
+    "minvlv": 8
+  },
+  {
+    "name": "Witch",
+    "initHealth": 140,
+    "health": 140,
+    "minDamage": 8,
+    "maxDamage": 14,
+    "critChance": 20,
+    "dodgeChance": 10,
+    "hits": 2,
+    "blocks": 2,
+    "avatar": "/assets/images/enemies/witch.png",
+    "rewards": {
+      "exp": 110,
+      "gold": 180
+    },
+    "minvlv": 7
+  },
+  {
+    "name": "Diablo",
+    "initHealth": 250,
+    "health": 250,
+    "minDamage": 15,
+    "maxDamage": 25,
+    "critChance": 15,
+    "dodgeChance": 8,
+    "hits": 3,
+    "blocks": 3,
+    "avatar": "/assets/images/enemies/diablo.png",
+    "rewards": {
+      "exp": 200,
+      "gold": 400
+    },
+    "minvlv": 9
+  }
+]

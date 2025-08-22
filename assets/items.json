@@ -1,0 +1,323 @@
+[
+  {
+    "name": "Dagger",
+    "bodyPart": "Right hand",
+    "price": 80,
+    "stats": {
+      "minDamage": 2,
+      "maxDamage": 6,
+      "critChance": 8
+    },
+    "reqs": {
+      "level": 1
+    },
+    "image": "/assets/images/items/dagger.png"
+  },
+  {
+    "name": "Claw",
+    "bodyPart": "Right hand",
+    "price": 120,
+    "stats": {
+      "minDamage": 3,
+      "maxDamage": 7,
+      "critChance": 10
+    },
+    "reqs": {
+      "level": 2,
+      "agility": 7,
+      "luck": 6
+    },
+    "image": "/assets/images/items/claw.png"
+  },
+  {
+    "name": "Light Battle Club",
+    "bodyPart": "Right hand",
+    "price": 150,
+    "stats": {
+      "minDamage": 5,
+      "maxDamage": 12,
+      "critChance": 3
+    },
+    "reqs": {
+      "level": 2,
+      "strength": 7,
+      "endurance": 6
+    },
+    "image": "/assets/images/items/club.png"
+  },
+  {
+    "name": "Hunter's knife",
+    "bodyPart": "Right hand",
+    "price": 200,
+    "stats": {
+      "minDamage": 6,
+      "maxDamage": 14,
+      "critChance": 12
+    },
+    "reqs": {
+      "level": 3,
+      "agility": 9,
+      "luck": 7
+    },
+    "image": "/assets/images/items/hunters-knife.png"
+  },
+  {
+    "name": "Short sword",
+    "bodyPart": "Right hand",
+    "price": 300,
+    "stats": {
+      "minDamage": 8,
+      "maxDamage": 16,
+      "critChance": 5
+    },
+    "reqs": {
+      "level": 4,
+      "strength": 10,
+      "agility": 7
+    },
+    "image": "/assets/images/items/short-sword.png"
+  },
+  {
+    "name": "Axe",
+    "bodyPart": "Right hand",
+    "price": 400,
+    "stats": {
+      "minDamage": 10,
+      "maxDamage": 20,
+      "critChance": 4
+    },
+    "reqs": {
+      "level": 5,
+      "strength": 14,
+      "endurance": 8
+    },
+    "image": "/assets/images/items/axe.png"
+  },
+  {
+    "name": "Knuckle",
+    "bodyPart": "Right hand",
+    "price": 450,
+    "stats": {
+      "minDamage": 6,
+      "maxDamage": 12,
+      "critChance": 10,
+      "hits": 1
+    },
+    "reqs": {
+      "level": 5,
+      "agility": 10,
+      "endurance": 8
+    },
+    "image": "/assets/images/items/knuckle.png"
+  },
+  {
+    "name": "Morgenstern",
+    "bodyPart": "Right hand",
+    "price": 600,
+    "stats": {
+      "minDamage": 12,
+      "maxDamage": 22,
+      "critChance": 6
+    },
+    "reqs": {
+      "level": 6,
+      "strength": 16,
+      "endurance": 10
+    },
+    "image": "/assets/images/items/morgenstern.png"
+  },
+  {
+    "name": "Warhammer",
+    "bodyPart": "Right hand",
+    "price": 700,
+    "stats": {
+      "minDamage": 15,
+      "maxDamage": 25,
+      "critChance": 3
+    },
+    "reqs": {
+      "level": 6,
+      "strength": 18,
+      "endurance": 12
+    },
+    "image": "/assets/images/items/warhammer.png"
+  },
+  {
+    "name": "Bastard sword",
+    "bodyPart": "Right hand",
+    "price": 900,
+    "stats": {
+      "minDamage": 14,
+      "maxDamage": 28,
+      "critChance": 8
+    },
+    "reqs": {
+      "level": 7,
+      "strength": 20,
+      "agility": 10
+    },
+    "image": "/assets/images/items/bastard-sword.png"
+  },
+  {
+    "name": "Claymore",
+    "bodyPart": "Right hand",
+    "price": 1200,
+    "stats": {
+      "minDamage": 18,
+      "maxDamage": 34,
+      "critChance": 10,
+      "hits": 1
+    },
+    "reqs": {
+      "level": 8,
+      "strength": 24,
+      "endurance": 14
+    },
+    "image": "/assets/images/items/claymore.png"
+  },
+  {
+    "name": "Small Wooden Shield",
+    "bodyPart": "Left hand",
+    "price": 100,
+    "stats": {
+      "blocks": 1,
+      "health": 10
+    },
+    "reqs": {
+      "level": 1,
+      "strength": 7,
+      "agility": 7
+    },
+    "image": "/assets/images/items/wood-shield.png"
+  },
+  {
+    "name": "Round Shield",
+    "bodyPart": "Left hand",
+    "price": 200,
+    "stats": {
+      "blocks": 1,
+      "health": 20
+    },
+    "reqs": {
+      "level": 3,
+      "strength": 7,
+      "endurance": 8
+    },
+    "image": "/assets/images/items/round-shield.png"
+  },
+  {
+    "name": "Spike Shield",
+    "bodyPart": "Left hand",
+    "price": 300,
+    "stats": {
+      "blocks": 1,
+      "health": 25,
+      "minDamage": 2,
+      "maxDamage": 4
+    },
+    "reqs": {
+      "level": 4,
+      "strength": 10,
+      "endurance": 10
+    },
+    "image": "/assets/images/items/spike-shield.png"
+  },
+  {
+    "name": "Knight Shield",
+    "bodyPart": "Left hand",
+    "price": 500,
+    "stats": {
+      "blocks": 1,
+      "health": 40
+    },
+    "reqs": {
+      "level": 6,
+      "strength": 12,
+      "endurance": 14
+    },
+    "image": "/assets/images/items/knight-shield.png"
+  },
+  {
+    "name": "Earrings of Life",
+    "bodyPart": "Head",
+    "price": 300,
+    "stats": {
+      "health": 50
+    },
+    "reqs": {
+      "level": 5,
+      "endurance": 10
+    },
+    "image": "/assets/images/items/life-earrings.png"
+  },
+  {
+    "name": "Earrings of Fury",
+    "bodyPart": "Head",
+    "price": 350,
+    "stats": {
+      "critChance": 8
+    },
+    "reqs": {
+      "level": 6,
+      "luck": 10
+    },
+    "image": "/assets/images/items/fury-earrings.png"
+  },
+  {
+    "name": "Earrings of Evasion",
+    "bodyPart": "Head",
+    "price": 350,
+    "stats": {
+      "dodgeChance": 8
+    },
+    "reqs": {
+      "level": 6,
+      "agility": 10
+    },
+    "image": "/assets/images/items/evasion-earrings.png"
+  },
+  {
+    "name": "Necklace of Shadows",
+    "bodyPart": "Neck",
+    "price": 400,
+    "stats": {
+      "dodgeChance": 10
+    },
+    "reqs": {
+      "level": 6,
+      "agility": 12
+    },
+    "image": "/assets/images/items/shadow-necklace.png"
+  },
+  {
+    "name": "Necklace of Valor",
+    "bodyPart": "Neck",
+    "price": 400,
+    "stats": {
+      "critChance": 6,
+      "minDamage": 2,
+      "maxDamage": 4
+    },
+    "reqs": {
+      "level": 6,
+      "strength": 10,
+      "luck": 9
+    },
+    "image": "/assets/images/items/valor-necklace.png"
+  },
+  {
+    "name": "Necklace of Eternity",
+    "bodyPart": "Neck",
+    "price": 600,
+    "stats": {
+      "health": 40,
+      "critChance": 4
+    },
+    "reqs": {
+      "level": 7,
+      "endurance": 12,
+      "luck": 8
+    },
+    "image": "/assets/images/items/eternity-necklace.png"
+  }
+]

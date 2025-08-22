@@ -6,63 +6,201 @@
   <title>Profile</title>
   <link rel="stylesheet" href="/assets/style.css">
   <style>
-    h1 {
-      font-size: 32px;
-    }
+    
     .profile-wrapper {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 50px;
+      margin-top: 40px;
     }
-    .profile, .stats {
-      width: 48%;
+    .stats {
+      width: 50%;
+    }
+    .profile {
+      position: relative;
+    }
+    .profile button {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s ease;
+    }
+    .profile:hover button {
+      opacity: 1;
     }
     .avatar {
       max-width: 100%;
       height: auto;
     }
+    .common-info {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #333;
+    }
+    .statistics {
+      text-align: right;
+    }
     .stat {
       font-size: 20px;
       font-weight: 600;
     }
-    .attr {
+    .attr, .attr span {
       font-style: italic;
       margin-bottom: 5px;
+      font-size: 16px;
     }
     hr {
       margin: 10px 0;
     }
+    .alert {
+      display: none;
+    }
+    h2 {
+      font-size: 24px;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    .items {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+    .items.disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #ccc;
+      padding: 20px;
+      text-align: center;
+      justify-content: space-between;
+      h2 {
+        margin-bottom: 5px;
+        font-size: 18px;
+        min-height: 3lh;
+      }
+      p {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+      ul {
+        list-style: none;
+        margin-bottom: 15px;
+      }
+      ul li {
+        font-size: 14px;
+      }
+      .item-info {
+        height: 100%;
+      }
+      .equip, .unequip {
+        background-color: #5FB3D7;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+          background-color: #6ED5EE;
+        }
+      };
+      .unequip {
+        background-color: #ed4645;
+      }
+    }
+    .reqs-not-met {
+      color: #ed4645;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .item-image {
+      width: 100%;
+      aspect-ratio: 1;      
+    }
+    .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    input[type="radio"] {
+      opacity: 0;
+      visibility: 0;
+      pointer-events: none;
+    }
+    label {
+      cursor: pointer;
+    }
+    label:has(input[type="radio"]) img {
+      transition: all 0.5s ease;
+    }
+    label:has(input[type="radio"]) img:hover {
+      -webkit-filter: drop-shadow(0px 0px 30px #ff8300);
+      filter: drop-shadow(0px 0px 30px #ff8300);
+    }
+    label:has(input[type="radio"]:checked) img {
+      -webkit-filter: drop-shadow(0px 0px 30px #138ec6);
+      filter: drop-shadow(0px 0px 30px #138ec6);
+    }
+    dialog {
+      border: none;
+    }
+    dialog::backdrop {
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+    }
   </style>
   <script>
-    const char = JSON.parse(window.localStorage.getItem('char'));
-    if (!char) window.location.href = 'register.html';
+    let char = JSON.parse(window.localStorage.getItem('char'));
+    if (!window.localStorage.getItem('char')) window.location.href = 'register.html';
   </script>
 </head>
 <body>
   <nav>
     <div class="container">
+      <span class="menu-logo">Not Fight Club</span>
       <ul>
         <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
         <li><a href="profile.html">Profile</a></li>
         <li><a href="settings.html">Settings</a></li>
+        <li><a href="battle.html" class="battle-btn">Fight!</a></li>
       </ul>
     </div>
   </nav>
   <div class="container">
     <div class="profile-wrapper">
-      <div class="profile">
-        
+      <div class="profile">        
         <img src="/assets/images/default.jpg" alt="Avatar" class="avatar">
-        <p class="wins">Wins: <span></span></p>
-        <p class="losses">Losses: <span></span></p>
-        <p class="draws">Draws: <span></span></p>
+        <button type="button" class="button" onclick="document.querySelector('dialog').showModal()">Change avatar</button>
       </div>
       <div class="stats">
         <h1 class="name"></h1>
-        <p class="stat">Level: <span class="level"></span></p>
-        <p class="stat">Experience: <span class="exp"></span></p>
-        <p class="stat">Gold: <span class="gold"></span></p>
-        <hr>
+        <div class="common-info">
+          <div class="info">
+            <p class="stat">Level: <span class="level"></span></p>
+            <p class="stat">Experience: <span class="exp"></span></p>
+            <p class="stat">Gold: <span class="gold"></span></p>
+          </div>
+          <div class="statistics">
+            <p class="wins">Wins: <span></span></p>
+            <p class="losses">Losses: <span></span></p>
+            <p class="draws">Draws: <span></span></p>
+          </div>
+        </div>
+
+        
         <p class="free-points">Free points: <span class="free-points-value"></span></p>
         <div class="stat-wrapper" data-stat="strength">
           <p class="stat">Strength: <span class="strength"></span></p>
@@ -88,13 +226,57 @@
         <button class="reset">Reset</button>
       </div>
     </div>
+    <h2>Items</h2>
+    <div class="alert">You can't equip or unequip items during a <a href="battle.html">battle</a>.</div>
+    <div class="items"></div>
   </div>
+  <dialog closedby="any">
+    <form>
+      <label>
+        <img src="/assets/images/chars/paladin.png" alt="Avatar" class="avatar">
+        <input type="radio" name="char" id="paladin" value="paladin">
+      </label>
+      <label>
+        <img src="/assets/images/chars/rogue.png" alt="Avatar" class="avatar">
+        <input type="radio" name="char" id="rogue" value="rogue">
+      </label>
+      <label>
+        <img src="/assets/images/chars/tough-guy.png" alt="Avatar" class="avatar">
+        <input type="radio" name="char" id="tough-guy" value="tough-guy">
+      </label>
+      <label>
+        <img src="/assets/images/chars/demon.png" alt="Avatar" class="avatar">
+        <input type="radio" name="char" id="demon" value="demon">
+      </label>
+      <button class="button">Save</button>
+    </form>
+  </dialog>
   <script src="/assets/index.js"></script>
   <script>
     const currentPage = document.location.pathname.split('/').pop();
     document.querySelector('nav ul li a[href="' + currentPage + '"]').classList.add('active');
+    char = new Char(char);
+
+    const equipParams = {
+      minDamage: "Min damage",
+      maxDamage: "Max damage",
+      critChance: "Crit chance",
+      dodgeChance: "Dodge chance",
+      defence: "Defence",
+      hits: "Hits",
+      blocks: "Blocks",
+      strength: "Strength",
+      agility: "Agility",
+      luck: "Luck",
+      endurance: "Endurance",
+      health: "Health",
+      initHealth: "Init health",
+      level: "Level"
+    }
 
     const statsEl = document.querySelector('.stats');
+    const itemsEl = document.querySelector('.items');
+    const alert = document.querySelector('.alert');
     
     document.querySelector('.avatar').src = char.avatar;
     document.querySelector('.name').innerText = char.name;
@@ -103,7 +285,7 @@
     document.querySelector('.draws span').innerText = char.draws;
 
     document.querySelector('.level').innerText = char.level;
-    document.querySelector('.exp').innerText = char.exp;
+    document.querySelector('.exp').innerText = `${char.exp} / ${getExpForLevel(char.level)}`;
     document.querySelector('.gold').innerText = char.gold;
 
     const renderStats = (char) => {
@@ -117,10 +299,21 @@
       document.querySelector('.inithealth').innerText = char.initHealth;
     }
 
+    function getExpForLevel(level) {
+      if (level === 0) return 25;
+      return 25 * Math.pow(2, level);
+    }
+
     renderStats(char);    
 
     let freePoints = char.level * 5 + 20 - (char.stats.luck + char.stats.agility + char.stats.strength + char.stats.endurance);
     const battle = JSON.parse(window.localStorage.getItem('battle'));
+
+    const battleBtn = document.querySelector('.battle-btn');
+    if (battle) {
+      battleBtn.textContent = 'Resume battle';
+    }
+
     if (freePoints > 0 && !battle) {
       const freePointsEl = document.querySelector('.free-points-value');
       freePointsEl.innerText = freePoints;
@@ -179,6 +372,101 @@
       freePointsEl.style.display = 'block';
       freePointsEl.querySelector('span').innerHTML = `You have ${freePoints} free points to allocate but you need to <a href="battle.html">finish the current battle</a> first.`;
     }
+
+
+    if (battle) {
+      itemsEl.classList.add('disabled');
+      alert.style.display = 'block';
+    }
+
+    renderItems();
+
+    itemsEl.addEventListener('click', e => {
+      if (!e.target.classList.contains('equip') && !e.target.classList.contains('unequip')) return;
+      
+      if (e.target.classList.contains('equip')) {
+        const item = e.target.closest('.item');
+        const itemIndex = char.items.findIndex(i => i.name === item.querySelector('h2').innerText);
+        const itemToEquip = char.items[itemIndex];
+        equipItem(itemToEquip);
+      } else {
+        const item = e.target.closest('.item');
+        const itemIndex = char.equippedItems.findIndex(i => i.name === item.querySelector('h2').innerText);
+        const itemToUnequip = char.equippedItems[itemIndex];
+        unequipItem(itemToUnequip);        
+      }
+      renderItems();
+    })
+
+    function equipItem(item) {
+      char.equippedItems.push(item);
+      char.health = 0;
+      window.localStorage.setItem('char', JSON.stringify(char));
+      window.location.reload();
+    }
+
+    function unequipItem(item) {
+      char.equippedItems = char.equippedItems.filter(i => i.name !== item.name);
+      window.localStorage.setItem('char', JSON.stringify(char));
+      window.location.reload();
+    }
+
+    function renderItems() {
+      itemsEl.innerHTML = '';
+      if (!char.items.length) {alert.style.display = 'block'; alert.innerHTML = 'You have no items.'; return;}
+      char.items.forEach(item => {
+        itemsEl.append(renderItem(item));
+      });
+    }
+
+    function renderItem(item) {
+      const equipped = char.equippedItems.find(i => i.name === item.name);
+      const isSlotTaken = char.equippedItems.find(i => (i.bodyPart === item.bodyPart && i.name !== item.name));
+      const reqsAreMet = Object.keys(item.reqs).every(stat => stat === 'level' ? char[stat] >= item.reqs[stat] : char.stats[stat] >= item.reqs[stat]);
+
+      const itemEl = document.createElement('div');
+      itemEl.classList.add('item');
+      itemEl.innerHTML = `
+        <div class="item-image">
+          <img src="${item.image}" alt="${item.name}">
+        </div>
+        <div class="item-info">
+          <h2>${item.name}</h2>
+          <p>Required stats:</p>
+          <ul>
+            ${Object.keys(item.reqs).map(stat => `<li>${equipParams[stat] || stat}: ${item.reqs[stat]}</li>`).join('')}
+          </ul>
+          <p>Stats:</p>
+          <ul>
+            ${Object.keys(item.stats).map(stat => `<li>${equipParams[stat] || stat}: ${item.stats[stat]}</li>`).join('')}
+          </ul>
+        </div>
+        
+        ${!reqsAreMet
+          ? `<p class='reqs-not-met'>Requirements not met</p>`
+          : isSlotTaken
+            ? `<p class="busy">Slot is already taken by ${isSlotTaken.name}</p>`
+            : (equipped
+              ? `<button class="unequip">Unequip</button>`
+              : `<button class="equip">Equip</button>`
+            )
+        }
+      `;
+      return itemEl;
+    }    
+
+    const changeCharBtn = document.querySelector('dialog button');
+    const currentCharImg = char.avatar.split('/').pop().split('.')[0];
+    document.querySelector(`input[type="radio"][value="${currentCharImg}"]`).checked = true;
+
+    changeCharBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const value = document.querySelector('input[type="radio"]:checked').value;
+      char.avatar = `/assets/images/chars/${value}.png`;
+      window.localStorage.setItem('char', JSON.stringify(char));
+      window.location.reload();
+    });
+
   </script>
 </body>
 </html>

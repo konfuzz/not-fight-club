@@ -1,44 +1,65 @@
-class Char {
-  constructor({name, stats = {strength: 5, agility: 5, luck: 5, endurance: 5}, health, level=0, hits=1, blocks=2, wins=0, losses=0, draws=0, avatar='/assets/images/default.jpg', gold = 0, exp = 0, rewards = {exp: 50, gold: 100}}) {
+class Enemy {
+  constructor({ name, initHealth, health, minDamage, maxDamage, critChance, dodgeChance, defence, hits, blocks, avatar, rewards }) {
+    this.minDamage = minDamage;
+    this.maxDamage = maxDamage;
+    this.critChance = critChance;
+    this.dodgeChance = dodgeChance;
+    this.defence = defence;
     this.name = name;
-    this.stats = stats;
-    this.initHealth = stats.endurance * 20;
+    this.initHealth = initHealth;
     this.health = health || this.initHealth;
-    this.minDamage = stats.strength;
-    this.maxDamage = stats.strength + 5;
-    this.critChance = stats.luck;
-    this.dodgeChance = stats.agility;
     this.hits = hits;
     this.blocks = blocks;
+    this.avatar = avatar;
+    this.rewards = rewards;
+  }
+}
+class Char {
+  constructor({ name, stats = { strength: 5, agility: 5, luck: 5, endurance: 5 }, health, level = 0, hits = 1, blocks = 2, wins = 0, losses = 0, draws = 0, avatar = '/assets/images/chars/paladin.png', gold = 0, exp = 0, rewards = { exp: 50, gold: 100 }, items, equippedItems }) {
+    console.log(items, equippedItems);
+    this.name = name;
+    this.stats = stats;
+    this.equippedItems = equippedItems || [];
+    this.initHealth = stats.endurance * 10 + this.equippedItems.reduce((acc, item) => acc + (item.stats.health || 0), 0);
+    this.health = health || this.initHealth;
+    this.minDamage = stats.strength + this.equippedItems.reduce((acc, item) => acc + (item.stats.minDamage || 0), 0);
+    this.maxDamage = stats.strength + 5 + this.equippedItems.reduce((acc, item) => acc + (item.stats.maxDamage || 0), 0);
+    this.critChance = stats.luck + this.equippedItems.reduce((acc, item) => acc + (item.stats.critChance || 0), 0);
+    this.dodgeChance = stats.agility + this.equippedItems.reduce((acc, item) => acc + (item.stats.dodgeChance || 0), 0);
+    this.initHits = 1;
+    this.initBlocks = 2;
+    this.hits = this.initHits + this.equippedItems.reduce((acc, item) => acc + (item.stats.hits || 0), 0);
+    this.blocks = this.initBlocks + this.equippedItems.reduce((acc, item) => acc + (item.stats.blocks || 0), 0);
     this.wins = wins;
     this.losses = losses;
     this.draws = draws;
     this.avatar = avatar;
     this.exp = exp;
-    this.level = Math.floor(this.exp / 100);
+    this.level = this.exp < 25 ? 0 : Math.floor(Math.log(this.exp / 25) / Math.log(2)) + 1;
     this.rewards = rewards;
     this.gold = gold;
+    this.items = items || [];
   }
 
   calcLevel() {
-    this.level = Math.floor(this.exp / 100);
+    this.level = this.exp < 25 ? 0 : Math.floor(Math.log(this.exp / 25) / Math.log(2)) + 1;
   }
 
   setStat(stat, value) {
     this.stats[stat] = value;
     switch (stat) {
       case 'strength':
-        this.minDamage = value;
-        this.maxDamage = value + 5;
+        this.minDamage = value + this.equippedItems.reduce((acc, item) => acc + (item.stats.minDamage || 0), 0);
+        this.maxDamage = value + 5 + this.equippedItems.reduce((acc, item) => acc + (item.stats.maxDamage || 0), 0);
         break;
       case 'agility':
-        this.dodgeChance = value;
+        this.dodgeChance = value + this.equippedItems.reduce((acc, item) => acc + (item.stats.dodgeChance || 0), 0);
         break;
       case 'luck':
-        this.critChance = value;
+        this.critChance = value + this.equippedItems.reduce((acc, item) => acc + (item.stats.critChance || 0), 0);
         break;
       case 'endurance':
-        this.health = value * 20;
+        this.health = value * 10 + this.equippedItems.reduce((acc, item) => acc + (item.stats.health || 0), 0);
         this.initHealth = this.health;
         break;
     }
@@ -137,7 +158,7 @@ class Battle {
         }
       } else {
         if (crit) {
-          this.log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong>. ${defender.name} tried to block, but got critical hit and dealt <strong class="red">${damage}</strong> damage`);
+          this.log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong>. ${defender.name} tried to block, but was critically hit, taking <strong class="red">${damage}</strong> damage`);
           return total + damage;
         } else {
           this.log(`<strong>${attacker.name}</strong> attacked <strong>${defender.name}</strong>'s <strong>${zone.toLowerCase()}</strong> but it was blocked`);
@@ -155,9 +176,9 @@ class Battle {
     }
     if (winner === this.char1) {
       this.char1.wins++;
-      const exp = Math.random() * 100 < this.char1.critChance ? this.char2.rewards.exp : Math.floor(Math.max(Math.random(), 0.1) * this.char2.rewards.exp);
+      const exp = this.calcChance(this.char1.luck) ? this.char2.rewards.exp : Math.floor(Math.max(Math.random(), 0.2) * this.char2.rewards.exp);
       this.char1.exp += exp;
-      const gold = Math.random() * 100 < this.char1.critChance ? this.char2.rewards.gold : Math.floor(Math.max(Math.random(), 0.1) * this.char2.rewards.gold);
+      const gold = this.calcChance(this.char1.luck) ? this.char2.rewards.gold : Math.floor(Math.max(Math.random(), 0.2) * this.char2.rewards.gold);
       this.char1.gold += gold;
       this.log(`You win the battle. Enemy defeated.`);
       this.log(`You gained ${exp} exp and ${gold} gold.`);
