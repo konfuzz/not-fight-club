@@ -9,7 +9,7 @@
     "dodgeChance": 5,
     "hits": 1,
     "blocks": 1,
-    "avatar": "/assets/images/enemies/goblin.png",
+    "avatar": "./assets/images/enemies/goblin.png",
     "rewards": {
       "exp": 20,
       "gold": 50
@@ -26,7 +26,7 @@
     "dodgeChance": 5,
     "hits": 1,
     "blocks": 2,
-    "avatar": "/assets/images/enemies/lizard.png",
+    "avatar": "./assets/images/enemies/lizard.png",
     "rewards": {
       "exp": 25,
       "gold": 60
@@ -43,7 +43,7 @@
     "dodgeChance": 0,
     "hits": 1,
     "blocks": 2,
-    "avatar": "/assets/images/enemies/troll.png",
+    "avatar": "./assets/images/enemies/troll.png",
     "rewards": {
       "exp": 35,
       "gold": 70
@@ -60,7 +60,7 @@
     "dodgeChance": 5,
     "hits": 1,
     "blocks": 2,
-    "avatar": "/assets/images/enemies/ork.png",
+    "avatar": "./assets/images/enemies/ork.png",
     "rewards": {
       "exp": 60,
       "gold": 100
@@ -77,7 +77,7 @@
     "dodgeChance": 5,
     "hits": 2,
     "blocks": 2,
-    "avatar": "/assets/images/enemies/ogre.png",
+    "avatar": "./assets/images/enemies/ogre.png",
     "rewards": {
       "exp": 90,
       "gold": 150
@@ -94,7 +94,7 @@
     "dodgeChance": 12,
     "hits": 2,
     "blocks": 2,
-    "avatar": "/assets/images/enemies/dark-elf.png",
+    "avatar": "./assets/images/enemies/dark-elf.png",
     "rewards": {
       "exp": 100,
       "gold": 170
@@ -111,7 +111,7 @@
     "dodgeChance": 5,
     "hits": 2,
     "blocks": 3,
-    "avatar": "/assets/images/enemies/death-knight.png",
+    "avatar": "./assets/images/enemies/death-knight.png",
     "rewards": {
       "exp": 130,
       "gold": 220
@@ -128,7 +128,7 @@
     "dodgeChance": 15,
     "hits": 2,
     "blocks": 2,
-    "avatar": "/assets/images/enemies/gargoyle.png",
+    "avatar": "./assets/images/enemies/gargoyle.png",
     "rewards": {
       "exp": 120,
       "gold": 200
@@ -145,7 +145,7 @@
     "dodgeChance": 10,
     "hits": 2,
     "blocks": 2,
-    "avatar": "/assets/images/enemies/witch.png",
+    "avatar": "./assets/images/enemies/witch.png",
     "rewards": {
       "exp": 110,
       "gold": 180
@@ -162,7 +162,7 @@
     "dodgeChance": 8,
     "hits": 3,
     "blocks": 3,
-    "avatar": "/assets/images/enemies/diablo.png",
+    "avatar": "./assets/images/enemies/diablo.png",
     "rewards": {
       "exp": 200,
       "gold": 400

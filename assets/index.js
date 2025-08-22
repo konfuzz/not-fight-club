@@ -15,7 +15,7 @@ class Enemy {
   }
 }
 class Char {
-  constructor({ name, stats = { strength: 5, agility: 5, luck: 5, endurance: 5 }, health, level = 0, hits = 1, blocks = 2, wins = 0, losses = 0, draws = 0, avatar = '/assets/images/chars/paladin.png', gold = 0, exp = 0, rewards = { exp: 50, gold: 100 }, items, equippedItems }) {
+  constructor({ name, stats = { strength: 5, agility: 5, luck: 5, endurance: 5 }, health, level = 0, hits = 1, blocks = 2, wins = 0, losses = 0, draws = 0, avatar = './assets/images/chars/paladin.png', gold = 0, exp = 0, rewards = { exp: 50, gold: 100 }, items, equippedItems }) {
     console.log(items, equippedItems);
     this.name = name;
     this.stats = stats;

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop</title>
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="./assets/style.css">
   <style>
     h1 {
       margin-top: 40px;
@@ -132,7 +132,7 @@
         level: "Level"
       }
       
-      const items = await fetch('/assets/items.json').then(res => res.json());
+      const items = await fetch('./assets/items.json').then(res => res.json());
       const goldEl = document.querySelector('.gold');
       const itemsEl = document.querySelector('.items');
       const battleBtn = document.querySelector('.battle-btn');

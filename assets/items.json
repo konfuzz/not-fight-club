@@ -11,7 +11,7 @@
     "reqs": {
       "level": 1
     },
-    "image": "/assets/images/items/dagger.png"
+    "image": "./assets/images/items/dagger.png"
   },
   {
     "name": "Claw",
@@ -27,7 +27,7 @@
       "agility": 7,
       "luck": 6
     },
-    "image": "/assets/images/items/claw.png"
+    "image": "./assets/images/items/claw.png"
   },
   {
     "name": "Light Battle Club",
@@ -43,7 +43,7 @@
       "strength": 7,
       "endurance": 6
     },
-    "image": "/assets/images/items/club.png"
+    "image": "./assets/images/items/club.png"
   },
   {
     "name": "Hunter's knife",
@@ -59,7 +59,7 @@
       "agility": 9,
       "luck": 7
     },
-    "image": "/assets/images/items/hunters-knife.png"
+    "image": "./assets/images/items/hunters-knife.png"
   },
   {
     "name": "Short sword",
@@ -75,7 +75,7 @@
       "strength": 10,
       "agility": 7
     },
-    "image": "/assets/images/items/short-sword.png"
+    "image": "./assets/images/items/short-sword.png"
   },
   {
     "name": "Axe",
@@ -91,7 +91,7 @@
       "strength": 14,
       "endurance": 8
     },
-    "image": "/assets/images/items/axe.png"
+    "image": "./assets/images/items/axe.png"
   },
   {
     "name": "Knuckle",
@@ -108,7 +108,7 @@
       "agility": 10,
       "endurance": 8
     },
-    "image": "/assets/images/items/knuckle.png"
+    "image": "./assets/images/items/knuckle.png"
   },
   {
     "name": "Morgenstern",
@@ -124,7 +124,7 @@
       "strength": 16,
       "endurance": 10
     },
-    "image": "/assets/images/items/morgenstern.png"
+    "image": "./assets/images/items/morgenstern.png"
   },
   {
     "name": "Warhammer",
@@ -140,7 +140,7 @@
       "strength": 18,
       "endurance": 12
     },
-    "image": "/assets/images/items/warhammer.png"
+    "image": "./assets/images/items/warhammer.png"
   },
   {
     "name": "Bastard sword",
@@ -156,7 +156,7 @@
       "strength": 20,
       "agility": 10
     },
-    "image": "/assets/images/items/bastard-sword.png"
+    "image": "./assets/images/items/bastard-sword.png"
   },
   {
     "name": "Claymore",
@@ -173,7 +173,7 @@
       "strength": 24,
       "endurance": 14
     },
-    "image": "/assets/images/items/claymore.png"
+    "image": "./assets/images/items/claymore.png"
   },
   {
     "name": "Small Wooden Shield",
@@ -188,7 +188,7 @@
       "strength": 7,
       "agility": 7
     },
-    "image": "/assets/images/items/wood-shield.png"
+    "image": "./assets/images/items/wood-shield.png"
   },
   {
     "name": "Round Shield",
@@ -203,7 +203,7 @@
       "strength": 7,
       "endurance": 8
     },
-    "image": "/assets/images/items/round-shield.png"
+    "image": "./assets/images/items/round-shield.png"
   },
   {
     "name": "Spike Shield",
@@ -220,7 +220,7 @@
       "strength": 10,
       "endurance": 10
     },
-    "image": "/assets/images/items/spike-shield.png"
+    "image": "./assets/images/items/spike-shield.png"
   },
   {
     "name": "Knight Shield",
@@ -235,7 +235,7 @@
       "strength": 12,
       "endurance": 14
     },
-    "image": "/assets/images/items/knight-shield.png"
+    "image": "./assets/images/items/knight-shield.png"
   },
   {
     "name": "Earrings of Life",
@@ -248,7 +248,7 @@
       "level": 5,
       "endurance": 10
     },
-    "image": "/assets/images/items/life-earrings.png"
+    "image": "./assets/images/items/life-earrings.png"
   },
   {
     "name": "Earrings of Fury",
@@ -261,7 +261,7 @@
       "level": 6,
       "luck": 10
     },
-    "image": "/assets/images/items/fury-earrings.png"
+    "image": "./assets/images/items/fury-earrings.png"
   },
   {
     "name": "Earrings of Evasion",
@@ -274,7 +274,7 @@
       "level": 6,
       "agility": 10
     },
-    "image": "/assets/images/items/evasion-earrings.png"
+    "image": "./assets/images/items/evasion-earrings.png"
   },
   {
     "name": "Necklace of Shadows",
@@ -287,7 +287,7 @@
       "level": 6,
       "agility": 12
     },
-    "image": "/assets/images/items/shadow-necklace.png"
+    "image": "./assets/images/items/shadow-necklace.png"
   },
   {
     "name": "Necklace of Valor",
@@ -303,7 +303,7 @@
       "strength": 10,
       "luck": 9
     },
-    "image": "/assets/images/items/valor-necklace.png"
+    "image": "./assets/images/items/valor-necklace.png"
   },
   {
     "name": "Necklace of Eternity",
@@ -318,6 +318,6 @@
       "endurance": 12,
       "luck": 8
     },
-    "image": "/assets/images/items/eternity-necklace.png"
+    "image": "./assets/images/items/eternity-necklace.png"
   }
 ]

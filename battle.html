@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Battle</title>
-  <link rel="stylesheet" href="assets/style.css">
-  <script src="assets/index.js"></script>
+  <link rel="stylesheet" href="./assets/style.css">
+  <script src="./assets/index.js"></script>
   <script>
     const charFromStorage = JSON.parse(window.localStorage.getItem('char'));
     if (!charFromStorage) {
@@ -164,7 +164,7 @@
           <div class="enemy">
             <p class="name"></p>
             <div class="health"></div>
-            <img src="/assets/images/default.jpg" alt="Enemy's avatar" class="avatar">
+            <img src="./assets/images/default.jpg" alt="Enemy's avatar" class="avatar">
           </div>
         </div>
         <button class="attack button" disabled>Attack</button>
@@ -176,7 +176,7 @@
   <script>
     (async () => {
       const char = new Char(charFromStorage);
-      const enemies = await fetch('/assets/enemies.json').then(res => res.json()).then(enemies => enemies.filter(enemy => enemy.minvlv <= char.level));
+      const enemies = await fetch('./assets/enemies.json').then(res => res.json()).then(enemies => enemies.filter(enemy => enemy.minvlv <= char.level));
       const randomIndex = Math.floor(Math.random() * enemies.length)
       const char2 = new Enemy(enemies[randomIndex]);
 
