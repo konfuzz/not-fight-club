@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile</title>
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="./assets/style.css">
   <style>
     
     .profile-wrapper {
@@ -182,7 +182,7 @@
   <div class="container">
     <div class="profile-wrapper">
       <div class="profile">        
-        <img src="/assets/images/default.jpg" alt="Avatar" class="avatar">
+        <img src="./assets/images/default.jpg" alt="Avatar" class="avatar">
         <button type="button" class="button" onclick="document.querySelector('dialog').showModal()">Change avatar</button>
       </div>
       <div class="stats">
@@ -233,25 +233,25 @@
   <dialog closedby="any">
     <form>
       <label>
-        <img src="/assets/images/chars/paladin.png" alt="Avatar" class="avatar">
+        <img src="./assets/images/chars/paladin.png" alt="Avatar" class="avatar">
         <input type="radio" name="char" id="paladin" value="paladin">
       </label>
       <label>
-        <img src="/assets/images/chars/rogue.png" alt="Avatar" class="avatar">
+        <img src="./assets/images/chars/rogue.png" alt="Avatar" class="avatar">
         <input type="radio" name="char" id="rogue" value="rogue">
       </label>
       <label>
-        <img src="/assets/images/chars/tough-guy.png" alt="Avatar" class="avatar">
+        <img src="./assets/images/chars/tough-guy.png" alt="Avatar" class="avatar">
         <input type="radio" name="char" id="tough-guy" value="tough-guy">
       </label>
       <label>
-        <img src="/assets/images/chars/demon.png" alt="Avatar" class="avatar">
+        <img src="./assets/images/chars/demon.png" alt="Avatar" class="avatar">
         <input type="radio" name="char" id="demon" value="demon">
       </label>
       <button class="button">Save</button>
     </form>
   </dialog>
-  <script src="/assets/index.js"></script>
+  <script src="./assets/index.js"></script>
   <script>
     const currentPage = document.location.pathname.split('/').pop();
     document.querySelector('nav ul li a[href="' + currentPage + '"]').classList.add('active');
@@ -462,7 +462,7 @@
     changeCharBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const value = document.querySelector('input[type="radio"]:checked').value;
-      char.avatar = `/assets/images/chars/${value}.png`;
+      char.avatar = `./assets/images/chars/${value}.png`;
       window.localStorage.setItem('char', JSON.stringify(char));
       window.location.reload();
     });
