@@ -48,7 +48,7 @@
         height: 100%;
       }
       .buy {
-        background-color: #5FB3D7;
+        background-color: var(--accent-light);
         border: none;
         color: white;
         padding: 5px 10px;
@@ -56,10 +56,10 @@
         cursor: pointer;
         transition: all 0.3s ease;
         &:hover {
-          background-color: #6ED5EE;
+          background-color: var(--accent-dark);
         }
         &.disabled {
-          background-color: #d1e7ff;
+          background-color: var(--accent-lighter);
           cursor: not-allowed;
         }
       };
@@ -91,6 +91,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="shop.html">Shop</a></li>
         <li><a href="profile.html">Profile</a></li>
+        <li><a href="enemies.html">Enemies</a></li>
         <li><a href="settings.html">Settings</a></li>
         <li><a href="battle.html" class="battle-btn">Fight!</a></li>
       </ul>
@@ -133,6 +134,15 @@
       }
       
       const items = await fetch('./assets/items.json').then(res => res.json());
+      
+      const devMode = JSON.parse(window.localStorage.getItem('dev-mode'));
+      if (devMode) {
+        items.map(item => {
+          item.reqs = {};
+          item.price = 0;
+        });
+      }
+
       const goldEl = document.querySelector('.gold');
       const itemsEl = document.querySelector('.items');
       const battleBtn = document.querySelector('.battle-btn');

@@ -48,7 +48,7 @@
       "exp": 35,
       "gold": 70
     },
-    "minvlv": 2
+    "minvlv": 1
   },
   {
     "name": "Angry Ork",
@@ -65,7 +65,7 @@
       "exp": 60,
       "gold": 100
     },
-    "minvlv": 4
+    "minvlv": 2
   },
   {
     "name": "Evil Ogre",
@@ -82,6 +82,40 @@
       "exp": 90,
       "gold": 150
     },
+    "minvlv": 3
+  },
+  {
+    "name": "Undead Ghoul",
+    "initHealth": 200,
+    "health": 200,
+    "minDamage": 5,
+    "maxDamage": 8,
+    "critChance": 0,
+    "dodgeChance": 0,
+    "hits": 1,
+    "blocks": 1,
+    "avatar": "./assets/images/enemies/ghoul.png",
+    "rewards": {
+      "exp": 95,
+      "gold": 160
+    },
+    "minvlv": 4
+  },
+  {
+    "name": "Skeleton Warrior",
+    "initHealth": 100,
+    "health": 100,
+    "minDamage": 10,
+    "maxDamage": 15,
+    "critChance": 5,
+    "dodgeChance": 0,
+    "hits": 1,
+    "blocks": 2,
+    "avatar": "./assets/images/enemies/skeleton.png",
+    "rewards": {
+      "exp": 100,
+      "gold": 170
+    },
     "minvlv": 5
   },
   {
@@ -97,7 +131,7 @@
     "avatar": "./assets/images/enemies/dark-elf.png",
     "rewards": {
       "exp": 100,
-      "gold": 170
+      "gold": 180
     },
     "minvlv": 6
   },

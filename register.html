@@ -25,7 +25,7 @@
       max-height: 40vh;
     }
     .register {
-      background-color: #212444;
+      background-color: var(--main);
       border-radius: 50px;
       width: 70%;
       min-height: 280px;
@@ -51,15 +51,16 @@
       margin: 0 auto;
     }
     button {
-      background-color: #5FB3D7;
+      background-color: var(--accent-light);
       cursor: pointer;
+      transition: all 0.3s ease;
       &:hover {
-        background-color: #6ED5EE;
+        background-color: var(--accent-lighter);
       }
     }
     input:invalid {
-      border-color: red 1px solid;
-      outline: 1px red solid;
+      border-color: var(--red) 1px solid;
+      outline: 1px var(--red) solid;
     }
   </style>
   <script>
