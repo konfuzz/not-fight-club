@@ -105,7 +105,7 @@
         height: 100%;
       }
       .equip, .unequip {
-        background-color: #5FB3D7;
+        background-color: var(--accent-light);
         border: none;
         color: white;
         padding: 5px 10px;
@@ -113,15 +113,15 @@
         cursor: pointer;
         transition: all 0.3s ease;
         &:hover {
-          background-color: #6ED5EE;
+          background-color: var(--accent-dark);
         }
       };
       .unequip {
-        background-color: #ed4645;
+        background-color: var(--red);
       }
     }
     .reqs-not-met {
-      color: #ed4645;
+      color: var(--red);
       font-size: 12px;
       margin-bottom: 10px;
     }
@@ -146,12 +146,12 @@
       transition: all 0.5s ease;
     }
     label:has(input[type="radio"]) img:hover {
-      -webkit-filter: drop-shadow(0px 0px 30px #ff8300);
-      filter: drop-shadow(0px 0px 30px #ff8300);
+      -webkit-filter: drop-shadow(0px 0px 30px var(--red));
+      filter: drop-shadow(0px 0px 30px var(--red));
     }
     label:has(input[type="radio"]:checked) img {
-      -webkit-filter: drop-shadow(0px 0px 30px #138ec6);
-      filter: drop-shadow(0px 0px 30px #138ec6);
+      -webkit-filter: drop-shadow(0px 0px 30px var(--accent-dark));
+      filter: drop-shadow(0px 0px 30px var(--accent-dark));
     }
     dialog {
       border: none;
@@ -174,6 +174,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="shop.html">Shop</a></li>
         <li><a href="profile.html">Profile</a></li>
+        <li><a href="enemies.html">Enemies</a></li>
         <li><a href="settings.html">Settings</a></li>
         <li><a href="battle.html" class="battle-btn">Fight!</a></li>
       </ul>

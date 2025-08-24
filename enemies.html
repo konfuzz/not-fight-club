@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enemies</title>
+  <link rel="stylesheet" href="./assets/style.css">
+  <style>
+    h1 {
+      margin-top: 40px;
+    }
+  
+    label {
+      display: inline-block;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  
+    .items {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+  
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #ccc;
+      padding: 20px;
+      text-align: center;
+      justify-content: space-between;
+  
+      h2 {
+        margin-bottom: 5px;
+        font-size: 18px;
+        min-height: 3lh;
+      }
+  
+      p {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+  
+      ul {
+        list-style: none;
+        margin-bottom: 15px;
+      }
+  
+      ul li {
+        font-size: 14px;
+      }
+  
+      .item-info {
+        height: 100%;
+      }
+  
+      .fight {
+        background-color: var(--accent-light);
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+  
+        &:hover {
+          background-color: var(--accent-dark);
+        }
+  
+        &.disabled {
+          background-color: var(--accent-lighter);
+          cursor: not-allowed;
+        }
+      }
+  
+      ;
+    }
+  
+    .item.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  
+    .item-image {
+      width: 100%;
+      aspect-ratio: 1;
+    }
+  
+    .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  </style>
+  <script>
+    const char = JSON.parse(window.localStorage.getItem('char'));
+    if (!char) window.location.href = 'register.html';
+  </script>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <span class="menu-logo">Not Fight Club</span>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="enemies.html">Enemies</a></li>
+        <li><a href="settings.html">Settings</a></li>
+        <li><a href="battle.html" class="battle-btn">Fight!</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main>
+    <div class="container">
+      <h1>Enemies</h1>
+      <div class="items"></div>
+    </div>
+  </main>
+  <div class="log" style="display: none;"></div>
+  <script src="./assets/index.js"></script>
+  <script>
+    const currentPage = document.location.pathname.split('/').pop();
+    document.querySelector('nav ul li a[href="' + currentPage + '"]').classList.add('active');
+
+    (async () => {
+
+        const items = await fetch('./assets/enemies.json').then(res => res.json());
+
+        const devMode = JSON.parse(window.localStorage.getItem('dev-mode'));
+
+        const itemsEl = document.querySelector('.items');
+        const battleBtn = document.querySelector('.battle-btn');
+
+        const battle = JSON.parse(window.localStorage.getItem('battle'));
+        if (battle) {
+          battleBtn.textContent = 'Resume battle';
+        }
+
+        itemsEl.addEventListener('click', e => {
+          if (!e.target.classList.contains('fight')) return;
+          const item = e.target.closest('.item');
+          const itemIndex = items.findIndex(i => i.name === item.querySelector('h2').innerText);
+          const enemyToFight = items[itemIndex];
+          const char1 = new Char(char);
+          const enemy = new Enemy(enemyToFight);
+          const battle = new Battle(char1, enemy);
+          window.localStorage.setItem('battle', JSON.stringify(battle));
+          window.location.href = 'battle.html';
+        })
+
+        renderItems(items);
+
+
+        function renderItems(items) {
+          itemsEl.innerHTML = '';
+          items.forEach(item => {
+            document.querySelector('.items').append(renderItem(item));
+          });
+        }
+
+        function renderItem(item) {
+          const itemEl = document.createElement('div');
+          itemEl.classList.add('item');
+          itemEl.innerHTML = `
+          <div class="item-image">
+            <img src="${item.avatar}" alt="${item.name}">
+          </div>
+          <div class="item-info">
+            <h2>${item.name}</h2>
+            <p>Params:</p>
+            <ul>
+              <li>Health: ${item.health}</li>
+              <li>Min damage: ${item.minDamage}</li>
+              <li>Max damage: ${item.maxDamage}</li>
+              <li>Crit chance: ${item.critChance}</li>
+              <li>Dodge chance: ${item.dodgeChance}</li>
+              <li>Hits: ${item.hits}</li>
+              <li>Blocks: ${item.blocks}</li>
+            </ul>
+            <p>Rewards:</p>
+            <ul>
+              <li>Max Exp: ${item.rewards.exp}</li>
+              <li>Max Gold: ${item.rewards.gold}</li>
+            </ul>
+            <p>Minimum level: ${item.minvlv}</p>
+          </div>
+
+          ${devMode && !battle ? `<button class="fight">Fight</button>` : ''}
+        `;
+          return itemEl;
+        }
+      })()
+  </script>
+</body>
+</html>

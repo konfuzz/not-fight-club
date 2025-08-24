@@ -27,12 +27,20 @@
     }
     button {
       padding: 5px 10px;
-      background-color: #007bff;
+      background-color: var(--accent-light);
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       text-decoration: none;
+      transition: all 0.3s ease;
+      &:hover {
+        background-color: var(--accent-dark);
+      }
+    }
+    .desc {
+      font-size: 14px;
+      font-style: italic;
     }
   </style>
   <script>
@@ -48,6 +56,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="shop.html">Shop</a></li>
         <li><a href="profile.html">Profile</a></li>
+        <li><a href="enemies.html">Enemies</a></li>
         <li><a href="settings.html">Settings</a></li>
         <li><a href="battle.html" class="battle-btn">Fight!</a></li>
       </ul>
@@ -64,6 +73,13 @@
         </label>
         <button type="submit">Save</button>
         <p class="success-message" style="display: none;">Name successfully changed!</p>
+        <div>
+          <label>
+            Dev mode:
+            <input type="checkbox" name="dev-mode" id="dev-mode">
+            <p class="desc">Random hits and blocks button enabled. Items cost 0 gold and have no requirements. You can fight agains any enemy.</p>
+          </label>
+        </div>
       </form>
     </div>
   </main>
@@ -87,12 +103,23 @@
       window.localStorage.setItem('char', JSON.stringify(char));
       const battle = JSON.parse(window.localStorage.getItem('battle'));
       if (battle) {
-        battle.player.name = char.name;
         battle.char1.name = char.name;
         window.localStorage.setItem('battle', JSON.stringify(battle));
       }
       currentName.textContent = char.name;
       form.querySelector('.success-message').style.display = 'block';
+    });
+
+    const devMode = document.querySelector('#dev-mode');
+    if (window.localStorage.getItem('dev-mode')) {
+      devMode.checked = true;
+    }
+    devMode.addEventListener('change', () => {
+      if (devMode.checked) {
+        window.localStorage.setItem('dev-mode', true);
+      } else {
+        window.localStorage.removeItem('dev-mode');
+      }
     });
   </script>
 </body>
